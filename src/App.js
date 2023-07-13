@@ -1,23 +1,37 @@
-import logo from './logo.svg';
 import './App.css';
+import Task from './components/Task';
+import TaskForm from './components/TaskForm';
+import { useState } from 'react';
 
 function App() {
+  const [tasks, setTasks] = useState([]);
+
+  const taskList = (task) => {
+    setTasks( tasks => [...tasks, task] )
+  }
+
+  const deleteTask = (id) => {
+    let left = tasks.slice(0,id)
+    let right = tasks.slice(id+1)
+
+    setTasks(left.concat(right))
+
+}
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <TaskForm taskList = { taskList } />
+      <h2>To Do List</h2>
+      <ul>
+        { tasks.map( (task, i) => 
+        <>
+          <div className='flex'>
+              <Task task= {task.task} key={i} id={i} removeFunction={deleteTask} />
+          </div>
+        </>
+        ) }
+      </ul>
+      
     </div>
   );
 }
